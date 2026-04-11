@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Safe area insets for notched devices */
+  :root {
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  }
+
+  body {
+    /* Prevent overscroll bounce on iOS */
+    overscroll-behavior-y: contain;
+    /* Ensure body takes full viewport height including safe areas */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+
+  #root {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+}
+
+@layer utilities {
+  /* Animations - respect prefers-reduced-motion */
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-bounce-in {
+      animation: bounceIn 0.5s ease-out;
+      /* Optimize for 60fps */
+      will-change: transform, opacity;
+    }
+
+    .animate-scale-in {
+      animation: scaleIn 0.3s ease-out;
+      will-change: transform, opacity;
+    }
+
+    .animate-slide-up {
+      animation: slideUp 0.4s ease-out;
+      will-change: transform, opacity;
+    }
+
+    .animate-slide-up-mobile {
+      animation: slideUpMobile 0.3s ease-out;
+      will-change: transform;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.2s ease-out;
+      will-change: opacity;
+    }
+
+    .animate-celebration {
+      animation: celebration 1s ease-out;
+      will-change: transform;
+    }
+  }
+
+  /* Fallback for reduced motion - instant appearance */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-bounce-in,
+    .animate-scale-in,
+    .animate-slide-up,
+    .animate-slide-up-mobile,
+    .animate-fade-in,
+    .animate-celebration {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Pull to refresh indicator */
+  .pull-to-refresh {
+    position: fixed;
+    top: calc(var(--safe-area-inset-top) + 60px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    pointer-events: none;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpMobile {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes celebration {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(-5deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  75% {
+    transform: scale(1.2) rotate(-3deg);
+  }
+}
+
+/* Confetti animation for milestone unlocks */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: currentColor;
+  animation: confetti-fall 3s linear forwards;
+  will-change: transform, opacity;
+}
