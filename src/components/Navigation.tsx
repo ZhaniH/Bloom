@@ -57,12 +57,12 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
       }}
     >
       <div className="max-w-7xl mx-auto px-1">
-        <ul className="grid grid-cols-4 sm:flex sm:justify-around items-center py-2 gap-1">
+        <ul className="flex overflow-x-auto sm:justify-around items-center py-2 gap-1 no-scrollbar">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = currentPage === item.id
             return (
-              <li key={item.id} className="flex-1">
+              <li key={item.id} className="flex-shrink-0 sm:flex-1" style={{ minWidth: '72px' }}>
                 <button
                   onClick={() => handleNavigate(item.id)}
                   className={`w-full flex flex-col items-center gap-0.5 py-2 px-0.5 rounded-md transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 min-h-[44px] min-w-[44px] ${
@@ -79,7 +79,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
                     className={isActive ? 'motion-safe:animate-bounce-in' : ''}
                     strokeWidth={isActive ? 2.5 : 2}
                   />
-                  <span className="text-[11px] sm:text-caption font-medium leading-tight">{item.label}</span>
+                  <span className="text-[11px] sm:text-caption font-medium leading-tight whitespace-nowrap">{item.label}</span>
                 </button>
               </li>
             )
