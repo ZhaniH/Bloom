@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Navigation } from './components/Navigation'
 import { Dashboard } from './pages/Dashboard'
 import { Chores } from './pages/Chores'
@@ -11,8 +11,9 @@ import { DataProvider } from './context/DataContext'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { useSwipeNavigation } from './hooks/useSwipeNavigation'
 import { SyncIndicator } from './components/SyncIndicator'
+import MiniGames from './pages/MiniGames'
 
-export type Page = 'dashboard' | 'chores' | 'homework' | 'water' | 'planner' | 'rewards' | 'pet'
+export type Page = 'dashboard' | 'chores' | 'homework' | 'water' | 'planner' | 'rewards' | 'pet' | 'games'
 
 function AppContent() {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard')
@@ -36,6 +37,8 @@ function AppContent() {
         return <Rewards />
       case 'pet':
         return <PetCare />
+      case 'games':
+        return <MiniGames />
       default:
         return <Dashboard onNavigate={setCurrentPage} />
     }

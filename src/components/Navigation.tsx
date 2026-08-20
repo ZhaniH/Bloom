@@ -1,4 +1,4 @@
-import { Home, CheckSquare, BookOpen, Droplet, Calendar, Trophy, Heart } from 'lucide-react'
+import { Home, CheckSquare, BookOpen, Droplet, Calendar, Trophy, Heart, Gamepad2 } from 'lucide-react'
 import { Page } from '../App'
 import { useEffect } from 'react'
 
@@ -15,14 +15,15 @@ const navItems = [
   { id: 'planner' as Page, label: 'Planner', icon: Calendar, key: '5' },
   { id: 'pet' as Page, label: 'Pet', icon: Heart, key: '6' },
   { id: 'rewards' as Page, label: 'Rewards', icon: Trophy, key: '7' },
+  { id: 'games' as Page, label: 'Games', icon: Gamepad2, key: '8' },
 ]
 
 export function Navigation({ currentPage, onNavigate }: NavigationProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Only handle number keys 1-7
+      // Only handle number keys 1-8
       const key = e.key
-      if (key >= '1' && key <= '7') {
+      if (key >= '1' && key <= '8') {
         const index = parseInt(key) - 1
         if (navItems[index]) {
           onNavigate(navItems[index].id)
