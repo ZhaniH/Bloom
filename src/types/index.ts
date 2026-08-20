@@ -40,6 +40,7 @@ export interface Achievement {
 
 export type PetStage = 'egg' | 'baby' | 'teen' | 'adult'
 export type PetMood = 'happy' | 'neutral' | 'sad' | 'excited'
+export type PetSpecies = 'chicken' | 'dog' | 'cat' | 'dragon' | 'bunny' | 'fish'
 
 export interface FeedingRecord {
   id: string
@@ -50,6 +51,7 @@ export interface FeedingRecord {
 
 export interface PetState {
   name: string
+  species: PetSpecies
   stage: PetStage
   happiness: number
   lastFed: string | null

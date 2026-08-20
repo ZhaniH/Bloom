@@ -1,19 +1,24 @@
-import { PetStage, PetMood } from '../types'
+import { PetStage, PetMood, PetSpecies } from '../types'
 import { useEffect, useState } from 'react'
 
 interface PetDisplayProps {
   stage: PetStage
   mood: PetMood
+  species?: PetSpecies
   size?: 'small' | 'medium' | 'large'
   animated?: boolean
   showEvolution?: boolean
 }
 
-const petEmojis = {
-  egg: '🥚',
-  baby: '🐣',
-  teen: '🐥',
-  adult: '🐔',
+// Egg stage is always a mystery egg regardless of species — the chosen
+// animal is revealed once it hatches into the baby stage.
+const speciesEmojis: Record<PetSpecies, { baby: string; teen: string; adult: string }> = {
+  chicken: { baby: '🐣', teen: '🐥', adult: '🐔' },
+  dog: { baby: '🐶', teen: '🐕', adult: '🦮' },
+  cat: { baby: '🐱', teen: '🐈', adult: '🐈‍⬛' },
+  dragon: { baby: '🐲', teen: '🐉', adult: '🐉' },
+  bunny: { baby: '🐰', teen: '🐇', adult: '🐇' },
+  fish: { baby: '🐠', teen: '🐟', adult: '🐡' },
 }
 
 const moodEmojis = {
@@ -23,7 +28,7 @@ const moodEmojis = {
   excited: '🤩',
 }
 
-export function PetDisplay({ stage, mood, size = 'medium', animated = true, showEvolution = false }: PetDisplayProps) {
+export function PetDisplay({ stage, mood, species = 'chicken', size = 'medium', animated = true, showEvolution = false }: PetDisplayProps) {
   const [isEvolving, setIsEvolving] = useState(false)
   const [prevStage, setPrevStage] = useState(stage)
 
@@ -45,7 +50,7 @@ export function PetDisplay({ stage, mood, size = 'medium', animated = true, show
     large: 'text-pet-lg',
   }
 
-  const petEmoji = petEmojis[stage]
+  const petEmoji = stage === 'egg' ? '🥚' : speciesEmojis[species][stage]
   const moodEmoji = moodEmojis[mood]
 
   return (

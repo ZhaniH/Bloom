@@ -184,7 +184,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         >
           <div className="flex items-center gap-4">
             <div className="flex-shrink-0">
-              <PetDisplay stage={pet.stage} mood={mood} size="small" animated={false} />
+              <PetDisplay stage={pet.stage} mood={mood} species={pet.species} size="small" animated={false} />
             </div>
             <div className="flex-1 text-left">
               <h3 className="font-bold text-body">{pet.name}</h3>
@@ -268,6 +268,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         onFeed={handleFeed}
         milestone={currentMilestone || 0}
         petStage={pet.stage}
+        petSpecies={pet.species}
       />
     </>
   )

@@ -13,6 +13,8 @@ interface DataContextType extends AppData {
   resetDaily: () => void
   feedPet: (milestone: number) => void
   updatePetName: (name: string) => void
+  updatePetSpecies: (species: PetState['species']) => void
+  awardGameReward: (points: number, happinessBoost: number) => void
   refreshData: () => Promise<void>
   isLoading: boolean
   error: string | null
@@ -63,6 +65,7 @@ const defaultPlannerItems: PlannerItem[] = [
 
 const defaultPet: PetState = {
   name: 'My Pet',
+  species: 'chicken',
   stage: 'egg',
   happiness: 50,
   lastFed: null,
@@ -85,6 +88,7 @@ function migratePetData(pet: any): PetState {
 
   return {
     name: pet.name || defaultPet.name,
+    species: pet.species || defaultPet.species,
     stage: pet.stage || defaultPet.stage,
     happiness: typeof pet.happiness === 'number' ? pet.happiness : defaultPet.happiness,
     lastFed: pet.lastFed || null,
@@ -425,6 +429,37 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }))
   }
 
+  const updatePetSpecies = (species: PetState['species']) => {
+    setData(prevData => ({
+      ...prevData,
+      pet: { ...prevData.pet, species },
+    }))
+  }
+
+  // Called when a kid wins a mini-game. Adds a small number of points
+  // (counting toward pet evolution, same as chores) and an immediate
+  // happiness boost — framed to the kid as "playing with your pet made
+  // them happy," separate from the milestone-based feeding system.
+  const awardGameReward = (points: number, happinessBoost: number) => {
+    setData(prevData => {
+      // Haptic feedback on mobile
+      if ('vibrate' in navigator) {
+        navigator.vibrate(50)
+      }
+
+      let newData: AppData = {
+        ...prevData,
+        totalPoints: prevData.totalPoints + points,
+        pet: {
+          ...prevData.pet,
+          happiness: Math.min(100, prevData.pet.happiness + happinessBoost),
+        },
+      }
+      newData = updatePetState(newData)
+      return checkAchievements(newData)
+    })
+  }
+
   const resetDaily = () => {
     setData(prevData => ({
       ...prevData,
@@ -464,6 +499,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
       resetDaily,
       feedPet,
       updatePetName,
+      updatePetSpecies,
+      awardGameReward,
       refreshData,
       isLoading,
       error,

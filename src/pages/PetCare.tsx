@@ -1,11 +1,20 @@
 import { useData } from '../context/DataContext'
 import { Heart, Calendar, TrendingUp, Edit2, Check, X, AlertCircle } from 'lucide-react'
 import { PetDisplay } from '../components/PetDisplay'
-import { PetMood, PetStage } from '../types'
+import { PetMood, PetStage, PetSpecies } from '../types'
 import { format } from 'date-fns'
 import { useState } from 'react'
 import { LoadingSkeleton } from '../components/LoadingSkeleton'
 import { ErrorState } from '../components/ErrorState'
+
+const speciesOptions: { id: PetSpecies; label: string; preview: string }[] = [
+  { id: 'chicken', label: 'Chicken', preview: '🐔' },
+  { id: 'dog', label: 'Dog', preview: '🐕' },
+  { id: 'cat', label: 'Cat', preview: '🐈' },
+  { id: 'dragon', label: 'Dragon', preview: '🐉' },
+  { id: 'bunny', label: 'Bunny', preview: '🐇' },
+  { id: 'fish', label: 'Fish', preview: '🐟' },
+]
 
 function getPetMood(happiness: number, stage: PetStage): PetMood {
   if (stage === 'egg') return 'neutral'
@@ -37,7 +46,7 @@ function getHappinessMessage(happiness: number): { message: string; color: strin
 }
 
 export function PetCare() {
-  const { pet, totalPoints, feedPet, updatePetName, isLoading, error } = useData()
+  const { pet, totalPoints, feedPet, updatePetName, updatePetSpecies, isLoading, error } = useData()
   const [isEditingName, setIsEditingName] = useState(false)
   const [editedName, setEditedName] = useState(pet.name)
   const [isSavingName, setIsSavingName] = useState(false)
@@ -152,7 +161,7 @@ export function PetCare() {
 
       {/* Pet Display */}
       <div className="bg-background rounded-lg p-8 border-2 border-accent shadow-medium text-center">
-        <PetDisplay stage={pet.stage} mood={mood} size="large" showEvolution={true} />
+        <PetDisplay stage={pet.stage} mood={mood} species={pet.species} size="large" showEvolution={true} />
         
         {/* Happiness Bar */}
         <div className="mt-6 max-w-xs mx-auto">
@@ -173,6 +182,42 @@ export function PetCare() {
             {pet.happiness < 40 && <AlertCircle size={14} />}
             {happinessInfo.message}
           </p>
+        </div>
+      </div>
+
+      {/* Choose Pet Species */}
+      <div className="bg-background rounded-lg p-4 border border-border shadow-subtle">
+        <h3 className="font-bold mb-1">Choose Your Pet</h3>
+        <p className="text-caption text-text-secondary mb-3">
+          {pet.stage === 'egg'
+            ? "Pick what your pet will be when it hatches!"
+            : "Change your pet's animal anytime — just for fun!"}
+        </p>
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+          {speciesOptions.map((option) => {
+            const isSelected = pet.species === option.id
+            return (
+              <button
+                key={option.id}
+                onClick={() => {
+                  updatePetSpecies(option.id)
+                  if ('vibrate' in navigator) navigator.vibrate(30)
+                }}
+                className={`flex flex-col items-center gap-1 py-3 rounded-md border-2 transition-all active:scale-95 ${
+                  isSelected
+                    ? 'bg-accent/10 border-accent'
+                    : 'bg-surface border-border hover:border-accent/50'
+                }`}
+                aria-pressed={isSelected}
+                aria-label={`Choose ${option.label}`}
+              >
+                <span className="text-h2" role="img" aria-hidden="true">{option.preview}</span>
+                <span className={`text-[11px] font-medium ${isSelected ? 'text-accent' : 'text-text-secondary'}`}>
+                  {option.label}
+                </span>
+              </button>
+            )
+          })}
         </div>
       </div>
 

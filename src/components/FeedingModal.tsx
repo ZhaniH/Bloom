@@ -1,6 +1,6 @@
 import { X, Star } from 'lucide-react'
 import { PetDisplay } from './PetDisplay'
-import { PetStage } from '../types'
+import { PetStage, PetSpecies } from '../types'
 import { useEffect, useRef, useState } from 'react'
 
 interface FeedingModalProps {
@@ -9,9 +9,10 @@ interface FeedingModalProps {
   onFeed: () => void
   milestone: number
   petStage: PetStage
+  petSpecies?: PetSpecies
 }
 
-export function FeedingModal({ isOpen, onClose, onFeed, milestone, petStage }: FeedingModalProps) {
+export function FeedingModal({ isOpen, onClose, onFeed, milestone, petStage, petSpecies }: FeedingModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const firstFocusableRef = useRef<HTMLButtonElement>(null)
   const [showConfetti, setShowConfetti] = useState(false)
@@ -148,7 +149,7 @@ export function FeedingModal({ isOpen, onClose, onFeed, milestone, petStage }: F
 
         <div className="text-center space-y-6">
           <div className="bg-accent/10 rounded-lg p-6 border-2 border-accent">
-            <PetDisplay stage={petStage} mood="excited" size="large" />
+            <PetDisplay stage={petStage} mood="excited" species={petSpecies} size="large" />
           </div>
 
           <div>
