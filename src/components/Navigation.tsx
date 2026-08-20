@@ -49,7 +49,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
 
   return (
     <nav 
-      className="fixed bottom-0 left-0 right-0 bg-background border-t border-border shadow-medium z-20"
+      className="bg-background border-t border-border"
       style={{ 
         paddingBottom: 'var(--safe-area-inset-bottom)',
         paddingLeft: 'var(--safe-area-inset-left)',
